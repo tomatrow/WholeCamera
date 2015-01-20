@@ -24,3 +24,9 @@
 #define COCOAPODS_VERSION_MINOR_TGCameraViewController 0
 #define COCOAPODS_VERSION_PATCH_TGCameraViewController 1
 
+// WholeCamera
+#define COCOAPODS_POD_AVAILABLE_WholeCamera
+#define COCOAPODS_VERSION_MAJOR_WholeCamera 0
+#define COCOAPODS_VERSION_MINOR_WholeCamera 0
+#define COCOAPODS_VERSION_PATCH_WholeCamera 1
+
