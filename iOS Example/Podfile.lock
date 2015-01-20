@@ -1,0 +1,16 @@
+PODS:
+  - DBCamera (2.3.9):
+    - GPUImage (~> 0.1)
+  - GPUImage (0.1.6)
+  - TGCameraViewController (2.0.1)
+
+DEPENDENCIES:
+  - DBCamera
+  - TGCameraViewController
+
+SPEC CHECKSUMS:
+  DBCamera: d73cddfffca44ab965202339ba5f5d74f8902956
+  GPUImage: cecb0830bb9428f50192042e3c7b53810f51388e
+  TGCameraViewController: 7738882984cdd6cef6e33b3fb57341bb049f4fb0
+
+COCOAPODS: 0.36.0.beta.1

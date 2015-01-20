@@ -1,0 +1,6 @@
+framework module TGCameraViewController {
+  umbrella header "Pods-iOS Example-TGCameraViewController-umbrella.h"
+
+  export *
+  module * { export * }
+}

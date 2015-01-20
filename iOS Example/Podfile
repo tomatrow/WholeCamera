@@ -1,0 +1,10 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+workspace 'iOS Example.xcworkspace'
+xcodeproj 'iOS Example.xcodeproj'
+
+target 'iOS Example' do
+  platform :ios, '8.0'
+  use_frameworks!
+  #pod 'WholeCamera', :path => '../'
+end
