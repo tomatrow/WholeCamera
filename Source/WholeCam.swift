@@ -8,6 +8,41 @@
 
 import Foundation
 
+
+public struct Moment {
+	public var selfie : ImageData
+	public var scene : ImageData
+	public init(selfie: ImageData, scene: ImageData) {
+		self.selfie = selfie
+		self.scene = scene
+	}
+	public init(images: (front:UIImage, back:UIImage), withSameMetaData moment:Moment) {
+		self.selfie = (images.front, moment.selfie.metaData)
+		self.scene = (images.back, moment.scene.metaData)
+	}
+}
+
+public typealias ImageData = (image: UIImage, metaData:Dictionary<String,AnyObject>)
+
+public protocol ViewControllerDelegate {
+	func camera(#camera:UIViewController, didFinishWithImages images:Moment)
+	func dimissCamera()
+}
+
+public enum CropMode {
+	case Selfie, Scene
+}
+public protocol MomentCropController {
+	var moment: Moment { get }
+	var activeCrop: CropMode { get }
+	var overlay: Bool { get }
+	var delegate : ViewControllerDelegate? { get set }
+	
+	init(moment : Moment)
+}
+
+//public protocol
+
 /*
 
 # Three (four) Controllers
