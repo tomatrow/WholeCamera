@@ -1,6 +1,0 @@
-framework module GPUImage {
-  umbrella header "Pods-iOS Example-GPUImage-umbrella.h"
-
-  export *
-  module * { export * }
-}

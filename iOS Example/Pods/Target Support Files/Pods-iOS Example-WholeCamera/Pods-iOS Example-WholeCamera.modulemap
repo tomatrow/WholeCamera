@@ -1,6 +1,0 @@
-framework module WholeCamera {
-  umbrella header "Pods-iOS Example-WholeCamera-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -9,8 +9,6 @@
 import DBCamera
 import TGCameraViewController
 
-
-
 public final class CropViewController: DBCameraBaseCropViewController, DBCameraCropRect, MomentCropController {
 
 	public var delegate : ViewControllerDelegate?
