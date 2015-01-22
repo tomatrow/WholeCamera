@@ -17,10 +17,10 @@
   },
   "source_files": "Source/*.swift",
   "dependencies": {
-    "DBCamera": [
+    "TGCameraViewController": [
 
     ],
-    "TGCameraViewController": [
+    "DBCamera": [
 
     ]
   }
