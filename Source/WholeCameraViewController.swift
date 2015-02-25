@@ -9,20 +9,71 @@
 import UIKit
 import DBCamera
 
-
-class WholeCameraViewController: UIViewController {
-	var delegate: WholeCameraViewControllerDelegate?
+public enum Facing {
+	case Front
+	case Back
 	
-    override func viewDidLoad() {
-        super.viewDidLoad()
+	var opposite: Facing {
+		switch self {
+			case .Front:
+				return .Back
+			case .Back:
+				return .Front
+		}
+	}
+}
 
-        // Do any additional setup after loading the view.
-    }
+/// The value type
+public struct Moment {
+	public var frontImage : UIImage?
+	public var backImage : UIImage?
+	public var frontMetaData : [NSObject : AnyObject]?
+	public var backMetaData : [NSObject : AnyObject]?
+	// TODO: Be able to mutate easily.
+}
+
+
+/// WholeCamera ViewController delegate protocol.
+public protocol WholeCameraViewControllerDelegate {
+	/**
+	Tells the delegate when the image is ready to use
+	
+	:param: wholeViewController The controller object managing the WholeCamera interface.
+	:param: moment The images and metadata.
+	*/
+	func cameraDidFinish(cameraViewController: UIViewController, moment: Moment)
+	
+	/// Tells the delegate when the camera must be dismissed
+	func dismissCamera(cameraViewController: UIViewController)
+}
+
+/**
+	The WholeCameraViewController.
+	-
+*/
+public class WholeCameraViewController: UIViewController {
+	public var delegate: WholeCameraViewControllerDelegate?
+	public private(set) var moment: Moment
+	
+	public var capturePriority: Facing
+	public convenience init(delegate: WholeCameraViewControllerDelegate?) {
+		self.init(delegate: delegate, moment: Moment())
+	}
+	required public convenience init(coder aDecoder: NSCoder) {
+		assert(true, "Cannot initalize with coder.")
+		self.init(delegate: nil)
+	}
+	public init(delegate: WholeCameraViewControllerDelegate?, moment: Moment) {
+		self.moment = Moment()
+		self.delegate = delegate
+		self.capturePriority = .Front
+		super.init()
+	}
 }
 
 
 extension WholeCameraViewController: DBCameraViewControllerDelegate {
-	 func camera(cameraViewController: AnyObject!, didFinishWithImage image: UIImage!, withMetadata metadata: [NSObject : AnyObject]!) {
+	 public func camera(cameraViewController: AnyObject!, didFinishWithImage image: UIImage!, withMetadata metadata: [NSObject : AnyObject]!) {
 		// Never use segue
 		
 		/*

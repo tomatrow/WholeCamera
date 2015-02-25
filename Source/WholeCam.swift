@@ -9,39 +9,6 @@
 import Foundation
 import DBCamera
 
-
-/// The value type
-public protocol Moment {
-	var frontImage : UIImage { get }
-	var backImage : UIImage { get }
-	var frontMetaData : [NSObject : AnyObject] { get }
-	var backMetaData : [NSObject : AnyObject] { get }
-}
-
-/// WholeCamera ViewController delegate protocol.
-public protocol WholeCameraViewControllerDelegate {
-	/**
-		Tells the delegate when the image is ready to use
-		
-		:param: wholeViewController The controller object managing the WholeCamera interface.
-		:param: moment The images and metadata.
-	*/
-	func cameraDidFinish(cameraViewController: UIViewController, moment: Moment)
-	
-	/// Tells the delegate when the camera must be dismissed
-	func dismissCamera(cameraViewController: UIViewController)
-}
-
-/**
-	The WholeCameraViewController.
-
-	- It's really a subclass of DBCamera's main view controller with the DBCameraViewControllerDelegate set to itself.
-	- We perform DBCamera's function twice, then return.
-*/
-public class WholeCameraViewController : DBCameraViewController {
-	
-}
-
 public class TestViewController : UIViewController {
 	
 	let segueConfiguration = {

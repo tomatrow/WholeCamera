@@ -163,7 +163,7 @@
 		4ED5928722A93BA5EB1D648F /* GPUImageWeakPixelInclusionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACA66F63BEF0ACD1E1CFB03 /* GPUImageWeakPixelInclusionFilter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		4EED383BE8A4EB6768EFEF73 /* GPUImage3x3TextureSamplingFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F6818DA327F0C1C96161256 /* GPUImage3x3TextureSamplingFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F1C0E3F531FC695991D0EB2 /* DBCameraBaseCropViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = B4A90D86EB988686D819DFE0 /* DBCameraBaseCropViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		50031FDF1A9070100013319D /* WholeCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50031FDE1A9070100013319D /* WholeCameraViewController.swift */; };
+		50C028E61A9D8D8300680722 /* WholeCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50031FDE1A9070100013319D /* WholeCameraViewController.swift */; };
 		50CE0EC991DBECE1BE9E1727 /* GPUImageGrayscaleFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = CFCCF06909F10A16A446D087 /* GPUImageGrayscaleFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51C820D9E57A5772B4B49A10 /* GPUImageLookupFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DDC6A35C6ADCCE5E1159562 /* GPUImageLookupFilter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51CF78CA8F1C4BAE25C2AD9A /* GPUImageGammaFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CAB7ABAF900BB3B4804960F /* GPUImageGammaFilter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -2209,7 +2209,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50031FDF1A9070100013319D /* WholeCameraViewController.swift in Sources */,
 				2471665513CF0C9205D96B0D /* Pods-iOS Example-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2218,6 +2217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50C028E61A9D8D8300680722 /* WholeCameraViewController.swift in Sources */,
 				BEAA4BA77AF521B229C857D5 /* Pods-iOS Example-WholeCamera-dummy.m in Sources */,
 				EEB5596271C9393DAA382EE4 /* WholeCam.swift in Sources */,
 			);
