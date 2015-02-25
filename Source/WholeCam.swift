@@ -7,78 +7,103 @@
 //
 
 import Foundation
+import DBCamera
 
 
-public struct Moment {
-	public var selfie : ImageData
-	public var scene : ImageData
-	public init(selfie: ImageData, scene: ImageData) {
-		self.selfie = selfie
-		self.scene = scene
-	}
-	public init(images: (front:UIImage, back:UIImage), withSameMetaData moment:Moment) {
-		self.selfie = (images.front, moment.selfie.metaData)
-		self.scene = (images.back, moment.scene.metaData)
-	}
+/// The value type
+public protocol Moment {
+	var frontImage : UIImage { get }
+	var backImage : UIImage { get }
+	var frontMetaData : [NSObject : AnyObject] { get }
+	var backMetaData : [NSObject : AnyObject] { get }
 }
 
-public typealias ImageData = (image: UIImage, metaData:Dictionary<String,AnyObject>)
-
-public protocol ViewControllerDelegate {
-	func camera(#camera:UIViewController, didFinishWithImages images:Moment)
-	func dimissCamera()
-}
-
-public enum CropMode {
-	case Selfie, Scene
-}
-public protocol MomentCropController {
-	var moment: Moment { get }
-	var activeCrop: CropMode { get }
-	var overlay: Bool { get }
-	var delegate : ViewControllerDelegate? { get set }
+/// WholeCamera ViewController delegate protocol.
+public protocol WholeCameraViewControllerDelegate {
+	/**
+		Tells the delegate when the image is ready to use
+		
+		:param: wholeViewController The controller object managing the WholeCamera interface.
+		:param: moment The images and metadata.
+	*/
+	func cameraDidFinish(cameraViewController: UIViewController, moment: Moment)
 	
-	init(moment : Moment)
+	/// Tells the delegate when the camera must be dismissed
+	func dismissCamera(cameraViewController: UIViewController)
 }
 
-//public protocol
+/**
+	The WholeCameraViewController.
 
-/*
-
-# Three (four) Controllers
-* One master view controlller that is a state machine. 
-	* http://khanlou.com/2015/01/finite-states-of-america/
-* Outline
-	* This entire thing is really just a slightly tweaked DBCamera. 
-	* Just like in DBCamera, we call a master VC and that contains a Capture controller, which can call a library controller, and becore returning the captured image, we run them through a crop controller. 
-	* The only differences are: 
-		* being able to ask for more than one image
-		* forcing the front or back camera. 
-		* The interface has indicators on it. 
-* Flow 
-	* Master Controller is called to do: 
-		* Selfie, Scene, or both 
-		* Cropping is optional. 
-
-## Master 
-* Protocols
-	* State 
-	* StateManager
-		* tranlateToState:fromState:
-
-
-
-
-## Capture
-
-## Gallery 
-
-## Crop
-* 
-
-
-
+	- It's really a subclass of DBCamera's main view controller with the DBCameraViewControllerDelegate set to itself.
+	- We perform DBCamera's function twice, then return.
 */
+public class WholeCameraViewController : DBCameraViewController {
+	
+}
 
+public class TestViewController : UIViewController {
+	
+	let segueConfiguration = {
+		(segueController: AnyObject!) -> () in
+		if let segueVC = segueController as? DBCameraSegueViewController {
+			segueVC.forceQuadCrop = true
+			segueVC.filtersView.removeFromSuperview()
+			
+			println(segueVC)
+		}
+	}
+	
+	public override func viewDidLoad() {
+		super.viewDidLoad()
+		self.view.backgroundColor = UIColor.redColor()
+	}
+	public override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+		self.openCameraFromViewController()
+	}
+	
+	private func openCameraFromViewController() {
+	
+		let cameraView: WholeCameraView = WholeCameraView.self.initWithFrame(UIScreen.mainScreen().bounds) as! WholeCameraView
+		// Using a camera settings block causes the preview to not work.
+		let cameraController = WholeCameraViewController(delegate: self, cameraView: cameraView)
+		let cameraContainer = DBCameraContainerViewController(delegate: self)
+		cameraContainer.cameraViewController = cameraController
+		
+		cameraController.useCameraSegue = false
+		
+		cameraContainer.setFullScreenMode()
+		
+		cameraView.buildInterface()
+	
+		let nav = UINavigationController(rootViewController: cameraContainer)
+		nav.setNavigationBarHidden(true, animated: false)
+		
+		self.presentViewController(nav, animated: true) {
+		}
+	}
+}
 
+/// Custom interface.
+/// It only needs the following buttons:  library, capture, SelfieSceneControl
+/// It has to show a square overlay
+public class WholeCameraView : DBCameraView {
+	lazy var overlay = DBCameraCropView()
+
+	internal func buildInterface() {
+		overlay.frame = bounds
+		overlay.cropRect = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.width)
+		addSubview(overlay)
+		defaultInterface()
+	}
+	
+	// TODO: On trigger, close shutter. 
+	// When DBCameraViewControllerDelegate recives data, 
+	//     if has both pictures
+	//			dismiss everything
+	//     else
+	//			restart session / flip camera (not sure what order)
+	//			open shutter
+}
 
