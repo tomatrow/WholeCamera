@@ -10,8 +10,7 @@ import UIKit
 import WholeCamera
 
 class ViewController: UIViewController {
-	
-	let vc = TestViewController()
+	lazy var cameraViewController: WholeCameraViewController = WholeCameraViewController(delegate: self)
 	
 	required init(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
@@ -22,17 +21,24 @@ class ViewController: UIViewController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
-		// Do any additional setup after loading the view, typically from a nib.
 	}
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
-
-		self.presentViewController(vc, animated: false) {
-			println("YAY")
-		}
+		
+		let nav = UINavigationController(rootViewController: cameraViewController)
+		cameraViewController.setFullScreenMode()
+		nav.navigationBarHidden = true
+		presentViewController(nav, animated: false, completion: nil)
 	}
+}
 
+extension ViewController: WholeCameraViewControllerDelegate {
+	func cameraDidFinish(cameraViewController: UIViewController, moment: Moment) {
+		println()
+	}
+	func dismissCamera(cameraViewController: UIViewController) {
+		println()
+	}
 }
 

@@ -9,29 +9,17 @@
 import UIKit
 import DBCamera
 
-public enum Facing {
-	case Front
-	case Back
-	
-	var opposite: Facing {
-		switch self {
-			case .Front:
-				return .Back
-			case .Back:
-				return .Front
-		}
-	}
-}
+/// basic data
+public typealias captureData = (image: UIImage, metaData: [NSObject : AnyObject])
 
-/// The value type
+/**
+	The main value type taken and returned. 
+	- Communicates the following:
+*/
 public struct Moment {
-	public var frontImage : UIImage?
-	public var backImage : UIImage?
-	public var frontMetaData : [NSObject : AnyObject]?
-	public var backMetaData : [NSObject : AnyObject]?
-	// TODO: Be able to mutate easily.
+	var selfie: captureData?
+	var scene: captureData?
 }
-
 
 /// WholeCamera ViewController delegate protocol.
 public protocol WholeCameraViewControllerDelegate {
@@ -49,59 +37,81 @@ public protocol WholeCameraViewControllerDelegate {
 
 /**
 	The WholeCameraViewController.
-	-
 */
 public class WholeCameraViewController: UIViewController {
 	public var delegate: WholeCameraViewControllerDelegate?
-	public private(set) var moment: Moment
-	
-	public var capturePriority: Facing
-	public convenience init(delegate: WholeCameraViewControllerDelegate?) {
-		self.init(delegate: delegate, moment: Moment())
+	public private(set) var moment: Moment = Moment(selfie: nil, scene: nil)
+	public private(set) lazy var cameraViewController: DBCameraViewController = {
+		let cameraView = WholeCameraView.self.initWithFrame(UIScreen.mainScreen().bounds) as! WholeCameraView
+		return DBCameraViewController(delegate: self, cameraView: cameraView)
+	}()
+
+	required public init(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
 	}
-	required public convenience init(coder aDecoder: NSCoder) {
-		assert(true, "Cannot initalize with coder.")
-		self.init(delegate: nil)
+	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 	}
-	public init(delegate: WholeCameraViewControllerDelegate?, moment: Moment) {
-		self.moment = Moment()
+	public init(delegate: WholeCameraViewControllerDelegate?) {
 		self.delegate = delegate
-		self.capturePriority = .Front
 		super.init()
+	}
+	
+	public override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		self.view.backgroundColor = UIColor.blackColor()
+		
+		cameraViewController.isContained = true
+		cameraViewController.useCameraSegue = false
+		cameraViewController.containerDelegate = self
+		
+		addChildViewController(cameraViewController)
+		
+		(cameraViewController.cameraView as! WholeCameraView).buildInterface()
+		view.addSubview(cameraViewController.view)
 	}
 }
 
+extension WholeCameraViewController: DBCameraContainerDelegate {
+	public func backFromController(fromController: AnyObject!) {
+		switchFromController(fromController, toController: cameraViewController)
+	}
+
+	public func switchFromController(fromController: AnyObject!, toController controller: AnyObject!) {
+		let to = controller as! UIViewController
+		let from = fromController as! UIViewController
+		
+		to.view.alpha = 1
+		to.view.transform = CGAffineTransformMakeScale(1, 1)
+		addChildViewController(to)
+		transitionFromViewController(from,
+			toViewController: to,
+			duration: 0.2,
+			options: .TransitionCrossDissolve,
+			animations: nil) {
+				(finished: Bool) -> Void in
+				from.removeFromParentViewController()
+		}
+	}
+	
+	public override func prefersStatusBarHidden() -> Bool {
+		return true
+	}
+}
 
 extension WholeCameraViewController: DBCameraViewControllerDelegate {
 	 public func camera(cameraViewController: AnyObject!, didFinishWithImage image: UIImage!, withMetadata metadata: [NSObject : AnyObject]!) {
-		// Never use segue
-		
 		/*
-		if VC == libraryVC
-		use cropcontroller on image
-		return
-		else if VC == captureVC
-		open shutter
-		let currentPicture := crop picture based on cameraView
-		else if VC == cropVC
-		let currentPicture := the image passed to us
-		end
-		
-		if metaData.facing == front
-		moment.frontPicture = currentPicture
-		moment.frontData = currentData
-		else if metaData.facing == back
-		moment.backPicture = currentPicture
-		moment.backData = currentData
-		end
-		
-		if has one picture
-		show the capture controller with the missing position
-		else if has both pictures
-		call delegate
-		end
-		
+		Two Options on Knowing what just got passed to us:
+			Extend DBCameraControllers with a Selfie/Scene purpose property, so I can just know what the iamge is for.
+			Just use Front/Back from the metaData.
+		Face Detection (pleasantry):
+			selfie's MUST have faces, scene can be whatever.
 		*/
+		
+		
 	}
-	
+	public func dismissCamera(cameraViewController: AnyObject!) {
+	}
 }
