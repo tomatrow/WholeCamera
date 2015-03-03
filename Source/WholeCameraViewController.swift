@@ -41,10 +41,10 @@ public protocol WholeCameraViewControllerDelegate {
 public class WholeCameraViewController: UIViewController {
 	public var delegate: WholeCameraViewControllerDelegate?
 	public private(set) var moment: Moment = Moment(selfie: nil, scene: nil)
-	public private(set) lazy var cameraViewController: DBCameraViewController = {
-		let cameraView = WholeCameraView.self.initWithFrame(UIScreen.mainScreen().bounds) as! WholeCameraView
-		return DBCameraViewController(delegate: self, cameraView: cameraView)
-	}()
+	// DBCameraViewController.cameraView does not return the set custom camera view.
+	// So we need to keep a reference to customCamera to call buildInterface() later.
+	public private(set) lazy var customCamera: WholeCameraView = WholeCameraView.self.initWithFrame(UIScreen.mainScreen().bounds) as! WholeCameraView
+	public private(set) lazy var cameraViewController: DBCameraViewController = DBCameraViewController(delegate: self, cameraView: self.customCamera)
 
 	required public init(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
@@ -68,7 +68,7 @@ public class WholeCameraViewController: UIViewController {
 		
 		addChildViewController(cameraViewController)
 		
-		(cameraViewController.cameraView as! WholeCameraView).buildInterface()
+		customCamera.buildInterface() 
 		view.addSubview(cameraViewController.view)
 	}
 }
