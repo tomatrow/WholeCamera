@@ -1,0 +1,6 @@
+framework module PrintlnMagic {
+  umbrella header "Pods-iOS Example-PrintlnMagic-umbrella.h"
+
+  export *
+  module * { export * }
+}

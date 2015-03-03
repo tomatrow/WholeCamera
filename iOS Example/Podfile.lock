@@ -1,13 +1,15 @@
 PODS:
-  - DBCamera (2.3.10):
+  - DBCamera (2.3.11):
     - GPUImage (~> 0.1)
   - GPUImage (0.1.6)
+  - PrintlnMagic (1.2.0)
   - TGCameraViewController (2.0.1)
   - WholeCamera (0.0.1):
     - DBCamera
     - TGCameraViewController
 
 DEPENDENCIES:
+  - PrintlnMagic
   - WholeCamera (from `../`)
 
 EXTERNAL SOURCES:
@@ -15,8 +17,9 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  DBCamera: 831e958699d8f728a23d6620415e2b6dcbc090d5
+  DBCamera: bfc526822c53d6e52695924635ac8781a69d3ef4
   GPUImage: cecb0830bb9428f50192042e3c7b53810f51388e
+  PrintlnMagic: 5f6aa008b70c953eab2dde09f63057858179629a
   TGCameraViewController: 7738882984cdd6cef6e33b3fb57341bb049f4fb0
   WholeCamera: 64f0fea4c8952b58c90b531c11664235f1caf498
 

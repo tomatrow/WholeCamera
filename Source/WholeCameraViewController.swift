@@ -102,6 +102,10 @@ extension WholeCameraViewController: DBCameraContainerDelegate {
 
 extension WholeCameraViewController: DBCameraViewControllerDelegate {
 	 public func camera(cameraViewController: AnyObject!, didFinishWithImage image: UIImage!, withMetadata metadata: [NSObject : AnyObject]!) {
+		println(cameraViewController)
+		println(image)
+		println(metadata)
+		
 		/*
 		Two Options on Knowing what just got passed to us:
 			Extend DBCameraControllers with a Selfie/Scene purpose property, so I can just know what the iamge is for.
@@ -113,5 +117,6 @@ extension WholeCameraViewController: DBCameraViewControllerDelegate {
 		
 	}
 	public func dismissCamera(cameraViewController: AnyObject!) {
+		println(cameraViewController)
 	}
 }

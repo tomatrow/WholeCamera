@@ -7,4 +7,7 @@ target 'iOS Example' do
   platform :ios, '8.0'
   use_frameworks!
   pod 'WholeCamera', :path => '../'
+  pod 'PrintlnMagic'
 end
+
+

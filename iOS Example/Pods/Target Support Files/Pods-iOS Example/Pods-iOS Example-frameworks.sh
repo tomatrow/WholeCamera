@@ -50,12 +50,14 @@ code_sign() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'DBCamera.framework'
   install_framework 'GPUImage.framework'
+  install_framework 'PrintlnMagic.framework'
   install_framework 'TGCameraViewController.framework'
   install_framework 'WholeCamera.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'DBCamera.framework'
   install_framework 'GPUImage.framework'
+  install_framework 'PrintlnMagic.framework'
   install_framework 'TGCameraViewController.framework'
   install_framework 'WholeCamera.framework'
 fi
