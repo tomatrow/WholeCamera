@@ -14,10 +14,6 @@ import DBCamera
 /// It only needs the following buttons:  library, capture, SelfieSceneControl
 /// It has to show a square overlay
 
-public enum Facing {
-	case Selfie
-	case Scene
-}
 
 public protocol FacingControl {
 	var facing: Facing? { get }

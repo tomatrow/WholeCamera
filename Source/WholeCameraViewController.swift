@@ -8,17 +8,43 @@
 
 import UIKit
 import DBCamera
+import PrintlnMagic
 
 /// basic data
-public typealias captureData = (image: UIImage, metaData: [NSObject : AnyObject])
+public typealias CaptureData = (image: UIImage, metaData: [NSObject : AnyObject])
+
+public enum Facing {
+	case Selfie
+	case Scene
+}
 
 /**
 	The main value type taken and returned. 
-	- Communicates the following:
 */
 public struct Moment {
-	var selfie: captureData?
-	var scene: captureData?
+	var selfie: CaptureData?
+	var scene: CaptureData?
+	var isWhole: Bool {
+		return selfie != nil && scene != nil
+	}
+	var nextNeededCapture: Facing? {
+		if selfie == nil {
+			return .Selfie
+		} else if scene == nil {
+			return .Scene
+		} else {
+			return nil
+		}
+	}
+	
+	mutating func add(capture: CaptureData, forFacing facing: Facing) {
+		switch facing {
+			case .Selfie:
+				self.selfie = capture
+			case .Scene:
+				self.scene = capture
+		}
+	}
 }
 
 /// WholeCamera ViewController delegate protocol.
@@ -40,20 +66,25 @@ public protocol WholeCameraViewControllerDelegate {
 */
 public class WholeCameraViewController: UIViewController {
 	public var delegate: WholeCameraViewControllerDelegate?
-	public private(set) var moment: Moment = Moment(selfie: nil, scene: nil)
-	// DBCameraViewController.cameraView does not return the set custom camera view.
-	// So we need to keep a reference to customCamera to call buildInterface() later.
+	public private(set) var moment: Moment
+	// DBCameraViewController does not expose custom cameras. So we need to keep a reference to customCamera to call buildInterface() later.
 	public private(set) lazy var customCamera: WholeCameraView = WholeCameraView.self.initWithFrame(UIScreen.mainScreen().bounds) as! WholeCameraView
 	public private(set) lazy var cameraViewController: DBCameraViewController = DBCameraViewController(delegate: self, cameraView: self.customCamera)
 
 	required public init(coder aDecoder: NSCoder) {
+		self.moment = Moment()
 		super.init(coder: aDecoder)
 	}
 	override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+		self.moment = Moment()
 		super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
 	}
-	public init(delegate: WholeCameraViewControllerDelegate?) {
+	public convenience init(delegate: WholeCameraViewControllerDelegate?) {
+		self.init(delegate: delegate, moment: Moment())
+	}
+	public init(delegate: WholeCameraViewControllerDelegate?, moment: Moment) {
 		self.delegate = delegate
+		self.moment = moment
 		super.init()
 	}
 	
@@ -102,22 +133,33 @@ extension WholeCameraViewController: DBCameraContainerDelegate {
 
 extension WholeCameraViewController: DBCameraViewControllerDelegate {
 	 public func camera(cameraViewController: AnyObject!, didFinishWithImage image: UIImage!, withMetadata metadata: [NSObject : AnyObject]!) {
-		println(cameraViewController)
-		println(image)
-		println(metadata)
-		
-		
-		/*
-		Two Options on Knowing what just got passed to us:
-			Extend DBCameraControllers with a Selfie/Scene purpose property, so I can just know what the iamge is for.
-			Just use Front/Back from the metaData.
-		Face Detection (pleasantry):
-			selfie's MUST have faces, scene can be whatever.
+		/* Algorithm
+			// handle image data
+				curentFacing = customCamera.facingControl.facing
+				
+				if image is not nil
+					if image is not square
+						switchFromController(from: cameraViewController, to: cropController(image))
+						return
+					else 
+						self.moment.add(capture: (image, metaData), currentfacing)
+					end
+				end
+			
+			// determine what to do next 
+				switch moment.nextNededCapture()
+					case .Selfie
+						customCamera.facingControl.facing = .Selfie
+						go back to camera controller
+					case .Scene
+						customCamera.facingControl.facing = .Scene
+						go back to camera controller
+					case nil
+						dismiss everything // we are done
+				end
 		*/
-		
-		
 	}
 	public func dismissCamera(cameraViewController: AnyObject!) {
-		println(cameraViewController)
+		magic(cameraViewController)
 	}
 }
