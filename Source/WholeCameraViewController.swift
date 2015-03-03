@@ -106,6 +106,7 @@ extension WholeCameraViewController: DBCameraViewControllerDelegate {
 		println(image)
 		println(metadata)
 		
+		
 		/*
 		Two Options on Knowing what just got passed to us:
 			Extend DBCameraControllers with a Selfie/Scene purpose property, so I can just know what the iamge is for.
